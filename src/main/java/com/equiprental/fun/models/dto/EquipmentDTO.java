@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class RentalEquipmentDTO implements Serializable {
+public class EquipmentDTO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
