@@ -1,11 +1,11 @@
 package com.equiprental.fun.models.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
-import java.time.LocalDate;
-
+@Data
 @Entity
-@Table(name = "rental_equipment")
+@Table(name = "equipment")
 public class Equipment {
 
     @Id
@@ -14,14 +14,10 @@ public class Equipment {
     @Enumerated(EnumType.STRING)
     @Column(name = "equipment_type")
     private EquipmentType equipmentType;
+    @Column(name = "brand")
+    private String brand;
     @Column(name = "description")
     private String description;
     @Column(name = "available_count")
     private int availableCount;
-    @Column(name = "price_per_day")
-    private double pricePerDay;
-    @Column(name = "start_date")
-    private LocalDate startDate;
-    @Column(name = "end_date")
-    private LocalDate endDate;
 }

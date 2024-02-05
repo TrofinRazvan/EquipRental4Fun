@@ -5,22 +5,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class EquipmentDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @NotNull(message = "Equipment type cannot be null.")
     @Enumerated(EnumType.STRING)
     private EquipmentType equipmentType;
+    @NotBlank(message = "Equipment brand cannot be blank.")
+    private String brand;
     @NotBlank(message = "Description cannot be blank.")
     private String description;
     @NotNull(message = "Available count cannot be null.")
