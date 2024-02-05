@@ -4,21 +4,14 @@ import com.equiprental.fun.util.Gender;
 import com.equiprental.fun.util.Regex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
-@Builder
 public class CustomerDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @NotBlank(message = "First name must not be blank")
     @Pattern(regexp = Regex.NAME_SURNAME, message = "First name contains invalid character.")
     private String firstName;
