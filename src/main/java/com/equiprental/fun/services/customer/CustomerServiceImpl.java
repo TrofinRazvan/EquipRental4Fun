@@ -1,6 +1,5 @@
 package com.equiprental.fun.services.customer;
 
-import com.equiprental.fun.exceptions.AlreadyExistException;
 import com.equiprental.fun.exceptions.NotFoundException;
 import com.equiprental.fun.models.dto.CustomerDTO;
 import com.equiprental.fun.models.entity.Customer;
