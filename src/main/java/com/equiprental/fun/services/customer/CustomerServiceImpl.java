@@ -53,11 +53,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public CustomerDTO updateCustomer(Long customerId, CustomerDTO customerDTO) {
-        Customer updatedCustomer = customerRepository.findById(customerId).orElseThrow(() -> new NotFoundException.UserNotFoundException(customerId));
+        Customer updateCustomer = customerRepository.findById(customerId).orElseThrow(() -> new NotFoundException.UserNotFoundException(customerId));
         customerServiceValidation.checkIfCustomerExists(customerDTO);
-        updateCustomerDetails(updatedCustomer, customerDTO);
-        customerRepository.save(updatedCustomer);
-        return objectMapper.convertValue(updatedCustomer, CustomerDTO.class);
+        updateCustomerDetails(updateCustomer, customerDTO);
+        customerRepository.save(updateCustomer);
+        return objectMapper.convertValue(updateCustomer, CustomerDTO.class);
     }
 
     public void updateCustomerDetails(Customer updatedCustomer, CustomerDTO customerDTO) {

@@ -1,11 +1,15 @@
 package com.equiprental.fun.services.equipment;
 
+import com.equiprental.fun.exceptions.NotFoundException;
 import com.equiprental.fun.models.dto.EquipmentDTO;
 import com.equiprental.fun.models.entity.Equipment;
+import com.equiprental.fun.models.entity.EquipmentType;
 import com.equiprental.fun.repositories.EquipmentRepository;
+import com.equiprental.fun.util.StringService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,15 +19,21 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     private final ObjectMapper objectMapper;
     private final EquipmentRepository equipmentRepository;
+    private final EquipmentServiceValidation equipmentServiceValidation;
+    private final StringService stringService;
 
-    public EquipmentServiceImpl(ObjectMapper objectMapper, EquipmentRepository equipmentRepository) {
+    public EquipmentServiceImpl(ObjectMapper objectMapper, EquipmentRepository equipmentRepository, EquipmentServiceValidation equipmentServiceValidation, StringService stringService) {
         this.objectMapper = objectMapper;
         this.equipmentRepository = equipmentRepository;
+        this.equipmentServiceValidation = equipmentServiceValidation;
+        this.stringService = stringService;
     }
+
     @Override
     public EquipmentDTO createNewEquipment(EquipmentDTO equipmentDTO) {
-        Optional<Equipment> existingEquipmentOptional = equipmentRepository.findByEquipmentTypeAndBrand(equipmentDTO.getEquipmentType(), equipmentDTO.getBrand());
+        Optional<Equipment> existingEquipmentOptional = equipmentRepository.findByEquipmentType(equipmentDTO.getEquipmentType());
         Equipment existingEquipment = existingEquipmentOptional.orElse(null);
+
         if (existingEquipment != null) {
             existingEquipment.setAvailableCount(existingEquipment.getAvailableCount() + 1);
             equipmentRepository.save(existingEquipment);
@@ -38,18 +48,39 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
     }
 
+
     @Override
-    public EquipmentDTO getEquipmentDetails(Long equipmentId) {
-        return null;
+    @Transactional
+    public EquipmentDTO getEquipmentById(Long equipmentId) {
+        Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(() -> new NotFoundException.EquipmentNotFoundException(equipmentId));
+        return objectMapper.convertValue(equipment, EquipmentDTO.class);
+    }
+
+    @Override
+    public EquipmentDTO getAvailableEquipmentByType(EquipmentType equipmentType) {
+        Equipment equipment = equipmentRepository.findByEquipmentType(equipmentType).orElseThrow(() -> new NotFoundException.EquipmentTypeNotFoundException(equipmentType));
+        return objectMapper.convertValue(equipment,EquipmentDTO.class);
     }
 
     @Override
     public EquipmentDTO updateEquipment(Long equipmentId, EquipmentDTO equipmentDTO) {
-        return null;
+        Equipment updateEquipment = equipmentRepository.findById(equipmentId).orElseThrow(() -> new NotFoundException.EquipmentNotFoundException(equipmentId));
+        equipmentServiceValidation.checkIfEquipmentExists(equipmentDTO);
+        updateEquipmentDetails(updateEquipment, equipmentDTO);
+        equipmentRepository.save(updateEquipment);
+        return objectMapper.convertValue(updateEquipment, EquipmentDTO.class);
+    }
+
+    public void updateEquipmentDetails(Equipment updatedEquipment, EquipmentDTO equipmentDTO) {
+        updatedEquipment.setEquipmentType(equipmentDTO.getEquipmentType());
+        updatedEquipment.setBrand(equipmentDTO.getBrand());
+        updatedEquipment.setDescription(stringService.capitalizeAndRemoveWhiteSpaces(equipmentDTO.getDescription()));
+        updatedEquipment.setAvailableCount(equipmentDTO.getAvailableCount());
     }
 
     @Override
     public void deleteEquipment(Long equipmentId) {
-
+        Equipment deleteEquipment = equipmentRepository.findById(equipmentId).orElseThrow(() -> new NotFoundException.EquipmentNotFoundException(equipmentId));
+        equipmentRepository.delete(deleteEquipment);
     }
 }
