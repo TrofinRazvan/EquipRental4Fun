@@ -5,7 +5,7 @@ import com.equiprental.fun.models.dto.EquipmentDTO;
 import com.equiprental.fun.models.entity.Equipment;
 import com.equiprental.fun.models.entity.EquipmentType;
 import com.equiprental.fun.repositories.EquipmentRepository;
-import com.equiprental.fun.util.StringService;
+import com.equiprental.fun.services.utils.StringUtilsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,14 @@ import java.util.Optional;
 @Service
 public class EquipmentServiceImpl implements EquipmentService {
 
-    private final ObjectMapper objectMapper;
     private final EquipmentRepository equipmentRepository;
+    private final ObjectMapper objectMapper;
     private final EquipmentServiceValidation equipmentServiceValidation;
-    private final StringService stringService;
+    private final StringUtilsService stringService;
 
-    public EquipmentServiceImpl(ObjectMapper objectMapper, EquipmentRepository equipmentRepository, EquipmentServiceValidation equipmentServiceValidation, StringService stringService) {
-        this.objectMapper = objectMapper;
+    public EquipmentServiceImpl(EquipmentRepository equipmentRepository, ObjectMapper objectMapper, EquipmentServiceValidation equipmentServiceValidation, StringUtilsService stringService) {
         this.equipmentRepository = equipmentRepository;
+        this.objectMapper = objectMapper;
         this.equipmentServiceValidation = equipmentServiceValidation;
         this.stringService = stringService;
     }
@@ -47,7 +47,6 @@ public class EquipmentServiceImpl implements EquipmentService {
             return objectMapper.convertValue(savedEquipment, EquipmentDTO.class);
         }
     }
-
 
     @Override
     @Transactional

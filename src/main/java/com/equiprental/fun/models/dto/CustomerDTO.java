@@ -20,7 +20,7 @@ public class CustomerDTO implements Serializable {
     private String lastName;
     @NotBlank(message = "CNP must not be blank")
     @Pattern(regexp = Regex.CNP, message = "Invalid CNP format")
-    private String CNP;
+    private String cnp;
     @NotBlank(message = "Email must not be blank")
     @Email(regexp = Regex.EMAIL, message = "Email is not valid")
     private String email;

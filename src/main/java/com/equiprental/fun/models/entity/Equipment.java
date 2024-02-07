@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "equipment")
+@Table(name = "equipments")
 public class Equipment {
 
     @Id
@@ -14,6 +14,8 @@ public class Equipment {
     @Enumerated(EnumType.STRING)
     @Column(name = "equipment_type")
     private EquipmentType equipmentType;
+    @Column(name = "price")
+    private Double price;
     @Column(name = "brand")
     private String brand;
     @Column(name = "description")

@@ -23,7 +23,7 @@ public class EquipmentServiceValidation {
             throw new NotFoundException.EquipmentTypeNotFoundException(equipmentDTO.getEquipmentType());
         }
         Optional<Equipment> equipmentBrand = equipmentRepository.findByBrand(equipmentDTO.getBrand());
-        if (equipmentType.isPresent()) {
+        if (equipmentBrand.isPresent()) {
             throw new NotFoundException.EquipmentBrandNotFoundException(equipmentDTO.getBrand());
         }
     }

@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class AlreadyExistException {
 
-    public static class CNPAlreadyExistException extends AbstractAppException {
-        public CNPAlreadyExistException(String CNP, UserRole userRole) {
+    public static class CnpAlreadyExistException extends AbstractAppException {
+        public CnpAlreadyExistException(String CNP, UserRole userRole) {
             super(StringUtils.capitalize(userRole.getName()) + " with CNP: " + CNP + " already exists in system.");
         }
     }
