@@ -17,7 +17,7 @@ public class ControllerHandler {
     }
 
     @ExceptionHandler({
-            AlreadyExistException.CNPAlreadyExistException.class,
+            AlreadyExistException.CnpAlreadyExistException.class,
             AlreadyExistException.EmailAddressAlreadyExistException.class,
             AlreadyExistException.PhoneNumberAlreadyExistException.class
     })

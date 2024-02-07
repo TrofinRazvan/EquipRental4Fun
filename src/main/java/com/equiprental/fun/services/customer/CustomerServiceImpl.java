@@ -4,7 +4,7 @@ import com.equiprental.fun.exceptions.NotFoundException;
 import com.equiprental.fun.models.dto.CustomerDTO;
 import com.equiprental.fun.models.entity.Customer;
 import com.equiprental.fun.repositories.CustomerRepository;
-import com.equiprental.fun.util.StringService;
+import com.equiprental.fun.services.utils.StringUtilsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
@@ -19,10 +19,10 @@ public class CustomerServiceImpl implements CustomerService {
     private final ObjectMapper objectMapper;
     private final CustomerRepository customerRepository;
     private final CustomerServiceValidation customerServiceValidation;
-    private final StringService stringService;
+    private final StringUtilsService stringService;
 
     @Autowired
-    public CustomerServiceImpl(ObjectMapper objectMapper, CustomerRepository customerRepository, CustomerServiceValidation customerServiceValidation, StringService stringService) {
+    public CustomerServiceImpl(ObjectMapper objectMapper, CustomerRepository customerRepository, CustomerServiceValidation customerServiceValidation, StringUtilsService stringService) {
         this.objectMapper = objectMapper;
         this.customerRepository = customerRepository;
         this.customerServiceValidation = customerServiceValidation;
@@ -63,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void updateCustomerDetails(Customer updatedCustomer, CustomerDTO customerDTO) {
         updatedCustomer.setFirstName(stringService.capitalizeAndRemoveWhiteSpaces(customerDTO.getFirstName()));
         updatedCustomer.setLastName(stringService.capitalizeAndRemoveWhiteSpaces(customerDTO.getLastName()));
-        updatedCustomer.setCNP(customerDTO.getCNP());
+        updatedCustomer.setCnp(customerDTO.getCnp());
         updatedCustomer.setEmail(customerDTO.getEmail());
         updatedCustomer.setPhoneNumber(customerDTO.getPhoneNumber());
         updatedCustomer.setDateOfBirth(customerDTO.getDateOfBirth());

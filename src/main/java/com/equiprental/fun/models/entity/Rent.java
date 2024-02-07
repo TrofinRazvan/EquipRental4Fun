@@ -13,8 +13,6 @@ public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "price_per_day")
-    private String pricePerDay;
     @Column(name = "start_date")
     private LocalDate startDate;
     @Column(name = "end_date")

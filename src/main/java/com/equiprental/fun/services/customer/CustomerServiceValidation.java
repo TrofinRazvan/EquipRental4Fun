@@ -19,9 +19,9 @@ public class CustomerServiceValidation {
     }
 
     public void checkIfCustomerExists(CustomerDTO customerDTO) {
-        Optional<Customer> CnpCustomer = customerRepository.findByCNP(customerDTO.getCNP());
-        if (CnpCustomer.isPresent()) {
-            throw new AlreadyExistException.CNPAlreadyExistException(customerDTO.getCNP(), UserRole.USER);
+        Optional<Customer> cnpCustomer = customerRepository.findByCnp(customerDTO.getCnp());
+        if (cnpCustomer.isPresent()) {
+            throw new AlreadyExistException.CnpAlreadyExistException(customerDTO.getCnp(), UserRole.USER);
         }
         Optional<Customer> emailCustomer = customerRepository.findByEmail(customerDTO.getEmail());
         if (emailCustomer.isPresent()) {

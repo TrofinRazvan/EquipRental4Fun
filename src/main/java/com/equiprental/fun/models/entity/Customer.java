@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "customer")
+@Table(name = "customers")
 public class Customer {
 
     @Id
@@ -16,8 +16,8 @@ public class Customer {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @Column(name = "CNP")
-    private String CNP;
+    @Column(name = "cnp")
+    private String cnp;
     @Column(name = "email")
     private String email;
     @Column(name = "phone_number")
