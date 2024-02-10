@@ -3,6 +3,8 @@ package com.equiprental.fun.models.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "equipments")
@@ -22,4 +24,6 @@ public class Equipment {
     private String description;
     @Column(name = "available_count")
     private int availableCount;
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL)
+    private List<Rent> rents;
 }
