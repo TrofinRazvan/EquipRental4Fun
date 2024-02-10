@@ -17,4 +17,12 @@ public class Rent {
     private LocalDate startDate;
     @Column(name = "end_date")
     private LocalDate endDate;
+    @Column(name = "rental_price")
+    private Double rentalPrice;
+    @ManyToOne
+    @JoinColumn(name = "equipment_id")
+    private Equipment equipment;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

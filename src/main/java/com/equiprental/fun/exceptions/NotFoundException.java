@@ -12,6 +12,7 @@ public class NotFoundException {
         public UserNotFoundException(Long userId) {
             super("User with ID: " + userId + " has not been found.");
         }
+
         public UserNotFoundException(UserRole userRole) {
             super(StringUtils.capitalize(userRole.getName()) + " does not exist in the system.");
         }
@@ -22,6 +23,7 @@ public class NotFoundException {
             super("No ski type equipment was found in your search query.");
         }
     }
+
     public static class EquipmentTypeNotFoundException extends AbstractAppException {
         public EquipmentTypeNotFoundException(EquipmentType equipmentType) {
             super("The type of ski type equipment selected does not exist in the system.");
@@ -31,6 +33,12 @@ public class NotFoundException {
     public static class EquipmentBrandNotFoundException extends AbstractAppException {
         public EquipmentBrandNotFoundException(String brand) {
             super("The selected ski type brand does not exist in the system.");
+        }
+    }
+
+    public static class NotAvailableException extends AbstractAppException {
+        public NotAvailableException(String message) {
+            super("Equipment not available for rent.");
         }
     }
 }
