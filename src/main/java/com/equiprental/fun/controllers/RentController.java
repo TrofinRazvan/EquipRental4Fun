@@ -34,4 +34,10 @@ public class RentController {
         );
         return ResponseEntity.ok(totalPrice);
     }
+
+    @GetMapping("/{customerId}/totalPrice")
+    public ResponseEntity<Double> getTotalRentPriceForCustomer(@PathVariable Long customerId) {
+        double totalPrice = rentService.calculateTotalRentPriceForCustomer(customerId);
+        return ResponseEntity.ok(totalPrice);
+    }
 }

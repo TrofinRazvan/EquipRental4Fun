@@ -3,13 +3,10 @@ package com.equiprental.fun.services.rent;
 import com.equiprental.fun.exceptions.NotFoundException;
 import com.equiprental.fun.models.entity.Customer;
 import com.equiprental.fun.models.entity.Equipment;
-import com.equiprental.fun.models.entity.EquipmentType;
 import com.equiprental.fun.models.entity.Rent;
 import com.equiprental.fun.repositories.CustomerRepository;
 import com.equiprental.fun.repositories.EquipmentRepository;
 import com.equiprental.fun.repositories.RentRepository;
-import com.equiprental.fun.services.equipment.EquipmentServiceValidation;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -58,5 +55,16 @@ public class RentServiceImpl implements RentService{
         long numberOfDays = ChronoUnit.DAYS.between(startDate, endDate);
         double totalPrice = numberOfDays * price;
         return totalPrice;
+    }
+
+    public double calculateTotalRentPriceForCustomer(Long customerId) {
+        List<Rent> rents = rentRepository.findByCustomerId(customerId);
+        double totalRentPrice = 0;
+        for (Rent rent : rents) {
+            double rentPrice = rent.getRentalPrice();
+            totalRentPrice += rentPrice;
+        }
+        System.out.println("The total rental price is: " + totalRentPrice);
+        return totalRentPrice;
     }
 }

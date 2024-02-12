@@ -6,4 +6,5 @@ public interface RentService {
 
     void rentEquipment(Long equipmentId, Long customerId, LocalDate startDate, LocalDate endDate);
     double calculateRentPrice(LocalDate startDate, LocalDate endDate, double price);
+    double calculateTotalRentPriceForCustomer(Long customerId);
 }
