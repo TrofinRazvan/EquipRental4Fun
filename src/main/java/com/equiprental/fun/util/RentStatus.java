@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum RentStatus {
 
+    RENTED("rent"),
     RETURNED("returned");
 
     private final String status;
