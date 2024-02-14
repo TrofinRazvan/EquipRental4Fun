@@ -1,5 +1,6 @@
 package com.equiprental.fun.models.entity;
 
+import com.equiprental.fun.util.RentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,4 +26,7 @@ public class Rent {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private RentStatus rentStatus;
 }
