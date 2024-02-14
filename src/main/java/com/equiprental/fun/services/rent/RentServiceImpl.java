@@ -38,9 +38,7 @@ public class RentServiceImpl implements RentService {
         }
         equipment.setAvailableCount(equipment.getAvailableCount() - 1);
         equipmentRepository.save(equipment);
-
         double calculatedPrice = calculateRentPrice(startDate, endDate, equipment.getPrice());
-
         Rent rental = new Rent();
         rental.setEquipment(equipment);
         Customer customer = customerRepository.findById(customerId)
@@ -49,6 +47,7 @@ public class RentServiceImpl implements RentService {
         rental.setStartDate(startDate);
         rental.setEndDate(endDate);
         rental.setRentalPrice(calculatedPrice);
+        rental.setRentStatus(RentStatus.RENTED);
         rentRepository.save(rental);
     }
 
