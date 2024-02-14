@@ -40,4 +40,10 @@ public class RentController {
         double totalPrice = rentService.calculateTotalRentPriceForCustomer(customerId);
         return ResponseEntity.ok(totalPrice);
     }
+
+    @DeleteMapping("/{rentId}")
+    public ResponseEntity<String> deleteRent(@PathVariable Long rentId) {
+        String message = rentService.deleteRent(rentId);
+        return ResponseEntity.ok(message);
+    }
 }

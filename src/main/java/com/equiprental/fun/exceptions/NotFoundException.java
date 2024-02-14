@@ -41,4 +41,10 @@ public class NotFoundException {
             super("Equipment not available for rent.");
         }
     }
+
+    public static class RentNotFoundException extends AbstractAppException {
+        public RentNotFoundException() {
+            super("The rental you are looking for does not exist in the system or has been deleted.");
+        }
+    }
 }

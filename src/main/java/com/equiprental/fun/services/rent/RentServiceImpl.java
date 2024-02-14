@@ -1,12 +1,14 @@
 package com.equiprental.fun.services.rent;
 
 import com.equiprental.fun.exceptions.NotFoundException;
+import com.equiprental.fun.exceptions.RentException;
 import com.equiprental.fun.models.entity.Customer;
 import com.equiprental.fun.models.entity.Equipment;
 import com.equiprental.fun.models.entity.Rent;
 import com.equiprental.fun.repositories.CustomerRepository;
 import com.equiprental.fun.repositories.EquipmentRepository;
 import com.equiprental.fun.repositories.RentRepository;
+import com.equiprental.fun.util.RentStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,7 +16,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-public class RentServiceImpl implements RentService{
+public class RentServiceImpl implements RentService {
 
     private final RentRepository rentRepository;
     private final EquipmentRepository equipmentRepository;
@@ -64,7 +66,21 @@ public class RentServiceImpl implements RentService{
             double rentPrice = rent.getRentalPrice();
             totalRentPrice += rentPrice;
         }
-        System.out.println("The total rental price is: " + totalRentPrice);
+        System.out.println("The total rental price for customer with ID " + customerId + " is: " + totalRentPrice);
         return totalRentPrice;
+    }
+
+    @Override
+    public String deleteRent(Long rentId) {
+        Rent rent = rentRepository.findById(rentId)
+                .orElseThrow(() -> new NotFoundException.RentNotFoundException());
+        if (rent.getRentStatus() == RentStatus.RETURNED) {
+            throw new RentException.RentHasReturnException(rent);
+        }
+        rentRepository.delete(rent);
+        Equipment equipment = rent.getEquipment();
+        equipment.setAvailableCount(equipment.getAvailableCount() + 1);
+        equipmentRepository.save(equipment);
+        return "Rent with ID " + rentId + " has been successfully deleted.";
     }
 }
