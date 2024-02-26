@@ -1,8 +1,10 @@
 package com.equiprental.fun.services.customer;
 
 import com.equiprental.fun.exceptions.AlreadyExistException;
+import com.equiprental.fun.exceptions.NotFoundException;
 import com.equiprental.fun.models.dto.CustomerDTO;
 import com.equiprental.fun.models.entity.Customer;
+import com.equiprental.fun.models.dto.login.RegisterRequestDto;
 import com.equiprental.fun.repositories.CustomerRepository;
 import com.equiprental.fun.util.UserRole;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,19 @@ public class CustomerServiceValidation {
         Optional<Customer> phoneNumberCustomer = customerRepository.findByPhoneNumber(customerDTO.getPhoneNumber());
         if (phoneNumberCustomer.isPresent()) {
             throw new AlreadyExistException.PhoneNumberAlreadyExistException(customerDTO.getPhoneNumber(), UserRole.USER);
+        }
+    }
+
+    public void validateCustomerNotAlreadyRegistered(RegisterRequestDto customer) throws AlreadyExistException.EmailAddressAlreadyExistException {
+        Optional<Customer> existingCustomer = customerRepository.findByEmail(customer.getEmail());
+        if (existingCustomer.isPresent()) {
+            throw new AlreadyExistException.EmailAddressAlreadyExistException(customer.getEmail(), UserRole.USER);
+        }
+    }
+
+    public void validateCustomerNotFound(Customer customer) throws NotFoundException.UserNotFoundException {
+        if (customer == null) {
+            throw new NotFoundException.UserNotFoundException(UserRole.USER);
         }
     }
 }

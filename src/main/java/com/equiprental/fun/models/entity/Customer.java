@@ -21,6 +21,8 @@ public class Customer {
     private String cnp;
     @Column(name = "email")
     private String email;
+    @Column(name = "password")
+    private String password;
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "date_of_birth")
@@ -33,6 +35,8 @@ public class Customer {
     private String buildingNumber;
     @Column(name = "city")
     private String city;
+    @Column(name = "account_creation_date")
+    private LocalDate accountCreationDate;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Rent> rents;
 }
