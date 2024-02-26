@@ -1,16 +1,24 @@
 package com.equiprental.fun.services.customer;
 
+import com.equiprental.fun.exceptions.CredentialException;
 import com.equiprental.fun.exceptions.NotFoundException;
 import com.equiprental.fun.models.dto.CustomerDTO;
 import com.equiprental.fun.models.entity.Customer;
+import com.equiprental.fun.models.dto.login.LoginRequestDto;
+import com.equiprental.fun.models.dto.login.RegisterRequestDto;
 import com.equiprental.fun.repositories.CustomerRepository;
 import com.equiprental.fun.services.utils.StringUtilsService;
+import com.equiprental.fun.util.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -20,13 +28,17 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerServiceValidation customerServiceValidation;
     private final StringUtilsService stringService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public CustomerServiceImpl(ObjectMapper objectMapper, CustomerRepository customerRepository, CustomerServiceValidation customerServiceValidation, StringUtilsService stringService) {
+    public CustomerServiceImpl(ObjectMapper objectMapper, CustomerRepository customerRepository,
+                               CustomerServiceValidation customerServiceValidation, StringUtilsService stringService,
+                               BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.objectMapper = objectMapper;
         this.customerRepository = customerRepository;
         this.customerServiceValidation = customerServiceValidation;
         this.stringService = stringService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -74,8 +86,50 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public void deleteCustomer(Long customerId) {
         Customer deleteCustomer = customerRepository.findById(customerId).orElseThrow(() -> new NotFoundException.UserNotFoundException(customerId));
         customerRepository.delete(deleteCustomer);
+    }
+
+    @Override
+    @Transactional
+    public RegisterRequestDto customerRegisterRequest(RegisterRequestDto customerRegisterRequestDto) {
+        customerServiceValidation.validateCustomerNotAlreadyRegistered(customerRegisterRequestDto);
+        Customer customer = objectMapper.convertValue(customerRegisterRequestDto, Customer.class);
+        setCustomerDetails(customerRegisterRequestDto, customer);
+        customerRepository.save(customer);
+        return objectMapper.convertValue(customer, RegisterRequestDto.class);
+    }
+
+    private void setCustomerDetails(RegisterRequestDto customerRegisterRequestDto, Customer customer) {
+        customer.setAccountCreationDate(LocalDate.now());
+        customer.setEmail(customerRegisterRequestDto.getEmail());
+        customer.setCity(customerRegisterRequestDto.getCity());
+        customer.setGender(customerRegisterRequestDto.getGender().name());
+        customer.setFirstName(stringService.capitalizeAndRemoveWhiteSpaces(customerRegisterRequestDto.getFirstName()));
+        customer.setLastName(stringService.capitalizeAndRemoveWhiteSpaces(customerRegisterRequestDto.getLastName()));
+        String encryptedPassword = bCryptPasswordEncoder.encode(customerRegisterRequestDto.getPassword());
+        customer.setPassword(encryptedPassword);
+    }
+
+    @Override
+    public LoginRequestDto customerLoginRequest(LoginRequestDto customerLoginRequestDto) {
+        Optional<Customer> customerLoginOptional = customerRepository.findByEmail(customerLoginRequestDto.getEmail());
+        Customer customerLogin = customerLoginOptional.orElseThrow(() -> new NotFoundException.UserNotFoundException(UserRole.USER));
+        customerServiceValidation.validateCustomerNotFound(customerLogin);
+        if (checkCustomerPassword(customerLoginRequestDto, customerLogin) && checkCustomerEmail(customerLoginRequestDto, customerLogin)) {
+            return customerLoginRequestDto;
+        } else {
+            throw new CredentialException.PasswordException("Incorrect password, please try again!");
+        }
+    }
+
+    private boolean checkCustomerPassword(LoginRequestDto customerLoginRequestDto, Customer customerLogin) {
+        return new BCryptPasswordEncoder().matches(customerLoginRequestDto.getPassword(), customerLogin.getPassword());
+    }
+
+    private boolean checkCustomerEmail(LoginRequestDto customerLoginRequestDto, Customer customerLogin) {
+        return customerLoginRequestDto.getEmail().equals(customerLogin.getEmail());
     }
 }

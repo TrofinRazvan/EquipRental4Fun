@@ -1,6 +1,8 @@
 package com.equiprental.fun.controllers;
 
 import com.equiprental.fun.models.dto.CustomerDTO;
+import com.equiprental.fun.models.dto.login.LoginRequestDto;
+import com.equiprental.fun.models.dto.login.RegisterRequestDto;
 import com.equiprental.fun.services.customer.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -39,5 +41,15 @@ public class CustomerController {
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long customerId) {
         customerService.deleteCustomer(customerId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterRequestDto> registerNewCustomer(@RequestBody @Valid RegisterRequestDto customerRegisterRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.customerRegisterRequest(customerRegisterRequestDto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginRequestDto> customerLogin(@RequestBody @Valid LoginRequestDto customerLoginRequestDto) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.customerLoginRequest(customerLoginRequestDto));
     }
 }
