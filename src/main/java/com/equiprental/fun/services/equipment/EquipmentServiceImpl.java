@@ -3,7 +3,7 @@ package com.equiprental.fun.services.equipment;
 import com.equiprental.fun.exceptions.NotFoundException;
 import com.equiprental.fun.models.dto.EquipmentDTO;
 import com.equiprental.fun.models.entity.Equipment;
-import com.equiprental.fun.models.entity.EquipmentType;
+import com.equiprental.fun.util.EquipmentType;
 import com.equiprental.fun.repositories.EquipmentRepository;
 import com.equiprental.fun.services.utils.StringUtilsService;
 import com.fasterxml.jackson.databind.ObjectMapper;

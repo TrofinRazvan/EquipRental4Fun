@@ -1,6 +1,6 @@
 package com.equiprental.fun.models.dto;
 
-import com.equiprental.fun.models.entity.EquipmentType;
+import com.equiprental.fun.util.EquipmentType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,20 +1,20 @@
 package com.equiprental.fun.models.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.equiprental.fun.util.Currency;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 public class PaymentDTO implements Serializable {
 
-    @NotBlank(message = "Cannot be 0.")
-    private double amount;
-    @NotNull(message = "Payment date cannot be null.")
-    private LocalDate paymentDate;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Payment currency must be specified.")
+    private Currency currency;
     @Pattern(regexp = "^(cash|card)$", message = "Payment method must be either 'cash' or 'card'")
     private String paymentMethod;
 }

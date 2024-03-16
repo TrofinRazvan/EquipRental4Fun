@@ -1,6 +1,6 @@
 package com.equiprental.fun.exceptions;
 
-import com.equiprental.fun.models.entity.EquipmentType;
+import com.equiprental.fun.util.EquipmentType;
 import com.equiprental.fun.util.UserRole;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

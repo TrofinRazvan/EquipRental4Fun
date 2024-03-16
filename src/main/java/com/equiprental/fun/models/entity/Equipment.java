@@ -1,5 +1,6 @@
 package com.equiprental.fun.models.entity;
 
+import com.equiprental.fun.util.EquipmentType;
 import jakarta.persistence.*;
 import lombok.Data;
 

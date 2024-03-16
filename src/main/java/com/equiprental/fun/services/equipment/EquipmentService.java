@@ -1,7 +1,7 @@
 package com.equiprental.fun.services.equipment;
 
 import com.equiprental.fun.models.dto.EquipmentDTO;
-import com.equiprental.fun.models.entity.EquipmentType;
+import com.equiprental.fun.util.EquipmentType;
 
 public interface EquipmentService {
 
