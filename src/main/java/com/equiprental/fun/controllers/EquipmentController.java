@@ -1,7 +1,7 @@
 package com.equiprental.fun.controllers;
 
 import com.equiprental.fun.models.dto.EquipmentDTO;
-import com.equiprental.fun.models.entity.EquipmentType;
+import com.equiprental.fun.util.EquipmentType;
 import com.equiprental.fun.services.equipment.EquipmentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

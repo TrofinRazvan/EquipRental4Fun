@@ -2,6 +2,7 @@ package com.equiprental.fun.controllers;
 
 import com.equiprental.fun.exceptions.AlreadyExistException;
 import com.equiprental.fun.exceptions.NotFoundException;
+import com.equiprental.fun.exceptions.PaymentException;
 import com.equiprental.fun.exceptions.RentException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
@@ -39,5 +40,10 @@ public class ControllerHandler {
     @ExceptionHandler(RentException.RentHasReturnException.class)
     public ResponseEntity<Object> handleRentHasReturnException(RentException.RentHasReturnException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rent has already been returned.");
+    }
+
+    @ExceptionHandler(PaymentException.PaymentCreationException.class)
+    public ResponseEntity<Object> handlePaymentCreationException(PaymentException.PaymentCreationException exception) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
     }
 }

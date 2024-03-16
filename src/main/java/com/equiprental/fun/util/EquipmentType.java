@@ -1,4 +1,4 @@
-package com.equiprental.fun.models.entity;
+package com.equiprental.fun.util;
 
 public enum EquipmentType {
 

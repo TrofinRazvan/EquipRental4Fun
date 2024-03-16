@@ -39,4 +39,6 @@ public class Customer {
     private LocalDate accountCreationDate;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Rent> rents;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Payment> payments;
 }
