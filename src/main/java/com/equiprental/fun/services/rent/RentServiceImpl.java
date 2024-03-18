@@ -72,7 +72,7 @@ public class RentServiceImpl implements RentService {
     @Override
     public String deleteRent(Long rentId) {
         Rent rent = rentRepository.findById(rentId)
-                .orElseThrow(() -> new NotFoundException.RentNotFoundException());
+                .orElseThrow(() -> new NotFoundException.RentNotFoundException(rentId));
         if (rent.getRentStatus() == RentStatus.RETURNED) {
             throw new RentException.RentHasReturnException(rent);
         }
