@@ -3,6 +3,7 @@ package com.equiprental.fun.controllers;
 import com.equiprental.fun.models.dto.EquipmentDTO;
 import com.equiprental.fun.models.entity.Rent;
 import com.equiprental.fun.services.rent.RentService;
+import com.equiprental.fun.services.returnequipment.ReturnService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

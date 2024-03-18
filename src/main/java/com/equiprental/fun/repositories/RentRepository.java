@@ -1,6 +1,7 @@
 package com.equiprental.fun.repositories;
 
 import com.equiprental.fun.models.entity.Rent;
+import com.equiprental.fun.util.RentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

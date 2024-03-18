@@ -43,8 +43,8 @@ public class NotFoundException {
     }
 
     public static class RentNotFoundException extends AbstractAppException {
-        public RentNotFoundException() {
-            super("The rental you are looking for does not exist in the system or has been deleted.");
+        public RentNotFoundException(Long rentId) {
+            super("The rental with ID " + rentId + " you are looking for does not exist in the system or has been deleted.");
         }
     }
 }

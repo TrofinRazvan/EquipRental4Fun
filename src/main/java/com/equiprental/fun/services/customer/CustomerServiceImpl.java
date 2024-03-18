@@ -1,13 +1,19 @@
 package com.equiprental.fun.services.customer;
 
+import com.equiprental.fun.exceptions.AlreadyExistException;
 import com.equiprental.fun.exceptions.CredentialException;
 import com.equiprental.fun.exceptions.NotFoundException;
 import com.equiprental.fun.models.dto.CustomerDTO;
 import com.equiprental.fun.models.entity.Customer;
 import com.equiprental.fun.models.dto.login.LoginRequestDto;
 import com.equiprental.fun.models.dto.login.RegisterRequestDto;
+import com.equiprental.fun.models.entity.Equipment;
+import com.equiprental.fun.models.entity.Rent;
 import com.equiprental.fun.repositories.CustomerRepository;
+import com.equiprental.fun.repositories.EquipmentRepository;
+import com.equiprental.fun.repositories.RentRepository;
 import com.equiprental.fun.services.utils.StringUtilsService;
+import com.equiprental.fun.util.RentStatus;
 import com.equiprental.fun.util.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
