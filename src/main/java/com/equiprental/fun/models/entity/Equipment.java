@@ -1,6 +1,7 @@
 package com.equiprental.fun.models.entity;
 
 import com.equiprental.fun.util.EquipmentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ public class Equipment {
     private String description;
     @Column(name = "available_count")
     private int availableCount;
+    @JsonIgnore
     @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL)
     private List<Rent> rents;
 }

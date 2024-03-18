@@ -22,4 +22,11 @@ public class AlreadyExistException {
             super(StringUtils.capitalize(userRole.getName()) + " with email " + email + " already exist in system.");
         }
     }
+
+
+    public static class CustomerHasOpenedRentsException extends AbstractAppException {
+        public CustomerHasOpenedRentsException() {
+            super("It is not possible to delete a customer who currently has at least one lease.");
+        }
+    }
 }
