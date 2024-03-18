@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
@@ -35,6 +38,12 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> getCustomerDetails(@PathVariable Long customerId) {
         CustomerDTO customerDetails = customerService.getCustomerDetails(customerId);
         return ResponseEntity.ok(customerDetails);
+    }
+
+    @GetMapping("/{customerId}/rentedEquipment")
+    public ResponseEntity<List<Map<String, Object>>> getRentedEquipmentForCustomer(@PathVariable Long customerId) {
+        List<Map<String, Object>> rentedEquipment = customerService.getRentedEquipmentForCustomer(customerId);
+        return ResponseEntity.ok(rentedEquipment);
     }
 
     @DeleteMapping("/delete/{customerId}")

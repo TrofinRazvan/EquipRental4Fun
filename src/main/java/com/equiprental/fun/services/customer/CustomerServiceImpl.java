@@ -24,8 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -36,16 +35,21 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerServiceValidation customerServiceValidation;
     private final StringUtilsService stringService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final RentRepository rentRepository;
+    private final EquipmentRepository equipmentRepository;
 
     @Autowired
     public CustomerServiceImpl(ObjectMapper objectMapper, CustomerRepository customerRepository,
                                CustomerServiceValidation customerServiceValidation, StringUtilsService stringService,
-                               BCryptPasswordEncoder bCryptPasswordEncoder) {
+                               BCryptPasswordEncoder bCryptPasswordEncoder, RentRepository rentRepository,
+                               EquipmentRepository equipmentRepository) {
         this.objectMapper = objectMapper;
         this.customerRepository = customerRepository;
         this.customerServiceValidation = customerServiceValidation;
         this.stringService = stringService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.rentRepository = rentRepository;
+        this.equipmentRepository = equipmentRepository;
     }
 
     @Override
@@ -95,8 +99,30 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void deleteCustomer(Long customerId) {
-        Customer deleteCustomer = customerRepository.findById(customerId).orElseThrow(() -> new NotFoundException.UserNotFoundException(customerId));
-        customerRepository.delete(deleteCustomer);
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new NotFoundException.UserNotFoundException(UserRole.USER));
+        if (hasActiveRentsForCustomer(customerId)) {
+            throw new AlreadyExistException.CustomerHasOpenedRentsException();
+        }
+        List<Rent> rents = rentRepository.findByCustomerId(customerId);
+        for (Rent rent : rents) {
+            if (rent.getRentStatus() == RentStatus.RENTED) {
+                Equipment equipment = rent.getEquipment();
+                equipment.setAvailableCount(equipment.getAvailableCount() + 1);
+                equipmentRepository.save(equipment);
+            }
+        }
+        customerRepository.delete(customer);
+    }
+
+    public boolean hasActiveRentsForCustomer(Long customerId) {
+        List<Rent> rents = rentRepository.findByCustomerId(customerId);
+        for (Rent rent : rents) {
+            if (rent.getRentStatus() == RentStatus.RENTED) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -138,5 +164,27 @@ public class CustomerServiceImpl implements CustomerService {
 
     private boolean checkCustomerEmail(LoginRequestDto customerLoginRequestDto, Customer customerLogin) {
         return customerLoginRequestDto.getEmail().equals(customerLogin.getEmail());
+    }
+
+    @Override
+    public List<Map<String, Object>> getRentedEquipmentForCustomer(Long customerId) {
+        List<Rent> rents = rentRepository.findByCustomerId(customerId);
+        List<Map<String, Object>> rentedEquipment = new ArrayList<>();
+        for (Rent rent : rents) {
+            if (rent.getRentStatus() == RentStatus.RENTED) {
+                Equipment equipment = rent.getEquipment();
+                Map<String, Object> equipmentMap = new HashMap<>();
+                equipmentMap.put("id", equipment.getId());
+                equipmentMap.put("equipmentType", equipment.getEquipmentType());
+                equipmentMap.put("price", equipment.getPrice());
+                equipmentMap.put("brand", equipment.getBrand());
+                equipmentMap.put("description", equipment.getDescription());
+                equipmentMap.put("startDate", rent.getStartDate());
+                equipmentMap.put("endDate", rent.getEndDate());
+                equipmentMap.put("rentalPrice", rent.getRentalPrice());
+                rentedEquipment.add(equipmentMap);
+            }
+        }
+        return rentedEquipment;
     }
 }

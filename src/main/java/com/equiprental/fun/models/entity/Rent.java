@@ -1,6 +1,7 @@
 package com.equiprental.fun.models.entity;
 
 import com.equiprental.fun.util.RentStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class Rent {
     private Double rentalPrice;
     @ManyToOne
     @JoinColumn(name = "equipment_id")
+    @JsonBackReference
     private Equipment equipment;
     @ManyToOne
     @JoinColumn(name = "customer_id")
